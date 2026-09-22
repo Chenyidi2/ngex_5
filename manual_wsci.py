@@ -9,19 +9,28 @@ but my phone still works.
 """
 
 selected_files = [
-    ##Use only the files that are relevant to the question.
-
+    "knowledge/password_changes.txt",
+    "knowledge/service_status.txt",
+    "knowledge/wifi_setup.txt"
 ]
 
 
 context = ""
 
-## Write a for loop to go through all the files in selected_files and read their contents into the context variable.
+## Read selected files into context
+for file_path in selected_files:
+    with open(file_path, "r") as f:
+        context += f.read()
+        context += "\n\n"
 
-
-## Call Qwen with the student's question and the context you created above.
-
-
+## Call Qwen with the question and the selected context
+response = chat(
+    model="qwen2.5:latest",
+    messages=[
+        {"role": "system", "content": "You are a university IT support assistant. Answer the student's question based on the provided context."},
+        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"}
+    ]
+)
 
 print(
     "Context characters:",
